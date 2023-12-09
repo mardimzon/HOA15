@@ -1,4 +1,3 @@
-#mainyml
 ---
 - name: Install and Configure OpenStack Components on CentOS
   become: yes
