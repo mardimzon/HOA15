@@ -1,1 +1,76 @@
 #mainyml
+---
+- name: Install and Configure OpenStack Components on CentOS
+  hosts: your_openstack_servers
+  become: yes
+  tasks:
+    - name: Install Neutron packages
+      yum:
+        name:
+          - openstack-neutron-server
+          - openstack-neutron-ml2
+          - openstack-neutron-linuxbridge
+          - openstack-neutron-l3-agent
+          - openstack-neutron-dhcp-agent
+          - openstack-neutron-metadata-agent
+        state: present
+
+    - name: Configure Neutron
+      template:
+        src: neutron.conf.j2
+        dest: /etc/neutron/neutron.conf
+
+    - name: Configure ML2 plugin
+      template:
+        src: ml2_conf.ini.j2
+        dest: /etc/neutron/plugins/ml2/ml2_conf.ini
+
+    - name: Restart Neutron
+      systemd:
+        name: neutron-server
+        state: restarted
+
+    # Horizon
+    - name: Install Horizon packages
+      yum:
+        name:
+          - openstack-dashboard
+        state: present
+
+    - name: Configure Apache for Horizon
+      template:
+        src: openstack-dashboard.conf.j2
+        dest: /etc/httpd/conf.d/openstack-dashboard.conf
+
+    - name: Configure Horizon settings
+      template:
+        src: local_settings.py.j2
+        dest: /etc/openstack-dashboard/local_settings.py
+
+    - name: Restart Apache
+      systemd:
+        name: httpd
+        state: restarted
+
+    # Cinder
+    - name: Install Cinder packages
+      yum:
+        name:
+          - openstack-cinder-api
+          - openstack-cinder-scheduler
+          - openstack-cinder-volume
+        state: present
+
+    - name: Configure Cinder
+      template:
+        src: cinder.conf.j2
+        dest: /etc/cinder/cinder.conf
+
+    - name: Create Cinder database
+      command: cinder-manage db sync
+      become_user: cinder
+
+    - name: Restart Cinder
+      systemd:
+        name: openstack-cinder-volume
+        state: restarted
