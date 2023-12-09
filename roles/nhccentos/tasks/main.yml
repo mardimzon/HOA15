@@ -1,6 +1,4 @@
-- name: Install and Configure OpenStack Components on CentOS
-  become: yes
-  tasks:
+#NEUTRON
     - name: Install Neutron packages
       yum:
         name:
