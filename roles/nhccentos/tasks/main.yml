@@ -35,11 +35,6 @@
         src: local_settings.py.j2
         dest: /etc/openstack-dashboard/local_settings.py
 
-    - name: Restart Apache
-      systemd:
-        name: httpd
-        state: restarted
-
     # Cinder
     - name: Install Cinder packages
       yum:
@@ -57,8 +52,3 @@
     - name: Create Cinder database
       command: cinder-manage db sync
       become_user: cinder
-
-    - name: Restart Cinder
-      systemd:
-        name: openstack-cinder-volume
-        state: restarted
