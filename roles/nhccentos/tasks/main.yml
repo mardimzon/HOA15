@@ -1,7 +1,6 @@
 #mainyml
 ---
 - name: Install and Configure OpenStack Components on CentOS
-  hosts: your_openstack_servers
   become: yes
   tasks:
     - name: Install Neutron packages
