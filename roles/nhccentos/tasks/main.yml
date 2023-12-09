@@ -2,12 +2,10 @@
     - name: Install Neutron packages
       yum:
         name:
-          - openstack-neutron-server
+          - openstack-neutron
           - openstack-neutron-ml2
           - openstack-neutron-linuxbridge
-          - openstack-neutron-l3-agent
-          - openstack-neutron-dhcp-agent
-          - openstack-neutron-metadata-agent
+          - ebtables
         state: present
 
     - name: Configure Neutron
