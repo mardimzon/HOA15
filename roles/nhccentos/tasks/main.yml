@@ -39,9 +39,7 @@
     - name: Install Cinder packages
       yum:
         name:
-          - openstack-cinder-api
-          - openstack-cinder-scheduler
-          - openstack-cinder-volume
+          - openstack-cinder
         state: present
 
     - name: Configure Cinder
